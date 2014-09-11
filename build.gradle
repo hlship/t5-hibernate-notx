@@ -2,6 +2,8 @@ description = "Remove automatic transactions from tapestry-hibernate"
 
 apply plugin: 'java'
 apply plugin: 'groovy'
+apply plugin: 'maven'
+apply plugin: "signing"
 
 sourceCompatibility = '1.6'
 targetCompatibility = '1.6'
@@ -26,6 +28,11 @@ configurations {
         resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
     }
 
+    published.extendsFrom archives, signatures
+}
+
+signing {
+    sign configurations.archives
 }
 
 dependencies {
@@ -39,5 +46,48 @@ dependencies {
 jar {
     manifest {
         attributes 'Tapestry-Module-Classes': 'com.howardlewisship.notx.modules.NoTxModule'
+    }
+}
+
+configurations {
+    deployerJars
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    deployerJars "org.apache.maven.wagon:wagon-ssh:2.2"
+}
+
+project.ext.deployRepositoryRoot = "scp://ssh.phx.nearlyfreespeech.net/home/public/repository"
+
+uploadArchives {
+    repositories {
+
+        project.ext.deployer = repositories.mavenDeployer {
+
+            pom.project {
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+            }
+
+            configuration = configurations.deployerJars
+
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            snapshotRepository(url: "$deployRepositoryRoot/snapshots") {
+                // I'd prefer to authenticate using public key, but Gradle(Maven(Ant)) just prompts
+                // for the password instead, so I have to keep a real password in my
+                // ~/.gradle/settings.gradle.
+                authentication(userName: hlsDeployUserName, password: hlsDeployPassword)
+            }
+        }
     }
 }
