@@ -1,0 +1,32 @@
+description = "Remove automatic transactions from tapestry-hibernate"
+
+apply plugin: 'java'
+
+sourceCompatibility = '1.6'
+targetCompatibility = '1.6'
+
+version = '0.0.1-SNAPSHOT'
+
+group = 'com.howardlewisship'
+
+repositories {
+    mavenCentral()
+
+    // All things JBoss/Javassist/Hibernate
+    maven {
+        name "JBoss"
+        url "http://repository.jboss.org/nexus/content/groups/public/"
+    }
+}
+
+configurations {
+
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
+
+}
+
+dependencies {
+    compile "org.apache.tapestry:tapestry-hibernate:5.3.7"
+}
