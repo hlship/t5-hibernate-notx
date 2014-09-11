@@ -1,6 +1,7 @@
 description = "Remove automatic transactions from tapestry-hibernate"
 
 apply plugin: 'java'
+apply plugin: 'groovy'
 
 sourceCompatibility = '1.6'
 targetCompatibility = '1.6'
@@ -29,6 +30,9 @@ configurations {
 
 dependencies {
     compile "org.apache.tapestry:tapestry-hibernate:5.3.7"
+
+    testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+    testCompile 'com.h2database:h2:1.4.181'
 }
 
 jar {
