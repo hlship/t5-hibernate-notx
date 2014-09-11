@@ -30,3 +30,9 @@ configurations {
 dependencies {
     compile "org.apache.tapestry:tapestry-hibernate:5.3.7"
 }
+
+jar {
+    manifest {
+        attributes 'Tapestry-Module-Classes': 'com.howardlewisship.notx.modules.NoTxModule'
+    }
+}
