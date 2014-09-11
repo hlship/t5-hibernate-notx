@@ -2,15 +2,19 @@ package com.howardlewisship.notx.modules;
 
 import com.howardlewisship.notx.NoTx;
 import com.howardlewisship.notx.services.NoTxHibernateSessionManager;
+import com.howardlewisship.notx.services.NoTxtCommitAfterWorker;
 import org.apache.tapestry5.hibernate.HibernateSessionManager;
 import org.apache.tapestry5.hibernate.HibernateSessionSource;
 import org.apache.tapestry5.ioc.MappedConfiguration;
+import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ScopeConstants;
 import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.Marker;
+import org.apache.tapestry5.ioc.annotations.Primary;
 import org.apache.tapestry5.ioc.annotations.Scope;
 import org.apache.tapestry5.ioc.services.PerthreadManager;
 import org.apache.tapestry5.ioc.services.ServiceOverride;
+import org.apache.tapestry5.services.transform.ComponentClassTransformWorker2;
 
 /**
  * This module acts as a mix-in to Tapestry's default Hibernate support to remove automatic transactions.
@@ -36,5 +40,13 @@ public class NoTxModule {
   public static void replaceStandardServices(MappedConfiguration<Class, Object> configuration,
                                              @NoTx HibernateSessionManager noTxManager) {
     configuration.add(HibernateSessionManager.class, noTxManager);
+  }
+
+  @Contribute(ComponentClassTransformWorker2.class)
+  @Primary
+  public static void provideCommitAfterAnnotationSupport(
+      OrderedConfiguration<ComponentClassTransformWorker2> configuration) {
+    // When replacing a contribution, you have to duplicate the ordering constraints as well.
+    configuration.overrideInstance("CommitAfter", NoTxtCommitAfterWorker.class, "after:Log");
   }
 }

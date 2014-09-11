@@ -1,0 +1,25 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+    <head>
+        <title>NoTx Demo Page</title>
+    </head>
+    <body>
+
+        <p>Number of tweets: <span id="tweet-count">${tweets.size()}</span></p>
+
+        <t:grid source="tweets"/>
+
+        <div>
+            <t:actionlink t:id="deleteAll">Delete All</t:actionlink>
+
+            |
+
+            <t:actionLink t:id="addNew">Add New</t:actionLink>
+
+            |
+
+            <t:actionLink t:id="commitFailure">Commit Failure</t:actionLink>
+
+        </div>
+
+    </body>
+</html>
