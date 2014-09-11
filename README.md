@@ -1,4 +1,4 @@
-= t5-hibernate-notx
+# t5-hibernate-notx
 
 
 _notx = No Transaction_
@@ -17,7 +17,7 @@ starts and commits the transaction.
 Note: A transaction commits even if a checked exception is thrown by the method.  A runtime exception will result
 in a rollback of the transaction.
 
-= TODO
+## TODO
 
 Support for @CommitAfter on service methods, via decoration, has not been addressed and will likely cause failures
 if used.
