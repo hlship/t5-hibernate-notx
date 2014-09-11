@@ -23,3 +23,7 @@ Support for @CommitAfter on service methods, via decoration, has not been addres
 if used.
 
 Although a simple application has been created to test the @CommitAfter annotation, the tests have not been automated.
+
+## License
+
+Apache Software License 2.0
