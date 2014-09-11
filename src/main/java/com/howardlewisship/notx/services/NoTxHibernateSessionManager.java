@@ -14,7 +14,7 @@ public class NoTxHibernateSessionManager implements HibernateSessionManager, Thr
   }
 
   private static void invalid(String name) {
-    throw new IllegalStateException(String.format("Method %s() should not be invoked when using the NoTxtHibernateSessionManager.", name))
+    throw new IllegalStateException(String.format("Method %s() should not be invoked when using the NoTxtHibernateSessionManager.", name));
   }
 
   public void abort() {
