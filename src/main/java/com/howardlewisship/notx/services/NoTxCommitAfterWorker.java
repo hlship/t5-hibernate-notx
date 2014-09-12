@@ -9,11 +9,11 @@ import org.apache.tapestry5.plastic.PlasticMethod;
 import org.apache.tapestry5.services.transform.ComponentClassTransformWorker2;
 import org.apache.tapestry5.services.transform.TransformationSupport;
 
-public class NoTxtCommitAfterWorker implements ComponentClassTransformWorker2 {
+public class NoTxCommitAfterWorker implements ComponentClassTransformWorker2 {
 
   private final MethodAdvice advice;
 
-  public NoTxtCommitAfterWorker(@NoTx MethodAdvice advice) {
+  public NoTxCommitAfterWorker(@NoTx MethodAdvice advice) {
     this.advice = advice;
   }
 

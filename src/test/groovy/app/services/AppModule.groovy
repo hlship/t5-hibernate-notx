@@ -1,6 +1,7 @@
 package app.services
 
-import com.howardlewisship.notx.modules.NoTxModule
+import com.howardlewisship.notx.modules.NoTxCoreModule
+import com.howardlewisship.notx.modules.NoTxWebModule
 import org.apache.tapestry5.SymbolConstants
 import org.apache.tapestry5.hibernate.HibernateTransactionAdvisor
 import org.apache.tapestry5.ioc.MappedConfiguration
@@ -16,7 +17,7 @@ import org.apache.tapestry5.ioc.services.SymbolProvider
 
 // Always necessary to explicitly include modules built by this module, since there's no MANIFEST.MF
 // until after test and build.
-@SubModule(NoTxModule)
+@SubModule([NoTxCoreModule, NoTxWebModule])
 class AppModule {
 
     static void bind(ServiceBinder binder) {
