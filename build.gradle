@@ -1,6 +1,13 @@
 description "Remove automatic transactions from tapestry-hibernate"
 
-ext.t5Version = "5.3.7"
+project.ext {
+    // For sub-project dependencies
+    t5Version = "5.3.7"
+
+    canDeploy = project.hasProperty("hlsDeployUserName") && project.hasProperty("hlsDeployPassword") && project.hasProperty("signing.keyId")
+
+    deployRepositoryRoot = "scp://ssh.phx.nearlyfreespeech.net/home/public/repository"
+}
 
 subprojects {
 
@@ -26,58 +33,58 @@ subprojects {
         }
     }
 
-    configurations {
+    if (canDeploy) {
 
-        configurations.all {
-            resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+        configurations {
+
+            configurations.all {
+                resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+            }
+
+            published.extendsFrom archives, signatures
         }
 
-        published.extendsFrom archives, signatures
-    }
-
-    signing {
-        sign configurations.archives
-    }
+        signing {
+            sign configurations.archives
+        }
 
 
-    configurations {
-        deployerJars
-    }
+        configurations {
+            deployerJars
+        }
 
-    repositories {
-        mavenCentral()
-    }
+        dependencies {
+            deployerJars "org.apache.maven.wagon:wagon-ssh:2.2"
+        }
 
-    dependencies {
-        deployerJars "org.apache.maven.wagon:wagon-ssh:2.2"
-    }
+        project.ext.
 
-    project.ext.deployRepositoryRoot = "scp://ssh.phx.nearlyfreespeech.net/home/public/repository"
+        uploadArchives {
+            repositories {
 
-    uploadArchives {
-        repositories {
+                project.ext.deployer = repositories.mavenDeployer {
 
-            project.ext.deployer = repositories.mavenDeployer {
-
-                pom.project {
-                    licenses {
-                        license {
-                            name 'The Apache Software License, Version 2.0'
-                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                            distribution 'repo'
+                    pom.project {
+                        inceptionYear "2014"
+                        licenses {
+                            license {
+                                name 'The Apache Software License, Version 2.0'
+                                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                                distribution 'repo'
+                            }
                         }
                     }
-                }
 
-                configuration = configurations.deployerJars
+                    configuration = configurations.deployerJars
 
-                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+                    beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-                snapshotRepository(url: "$deployRepositoryRoot/snapshots") {
-                    // I'd prefer to authenticate using public key, but Gradle(Maven(Ant)) just prompts
-                    // for the password instead, so I have to keep a real password in my
-                    // ~/.gradle/settings.gradle.
-                    authentication(userName: hlsDeployUserName, password: hlsDeployPassword)
+                    snapshotRepository(url: "$deployRepositoryRoot/snapshots") {
+                        // I'd prefer to authenticate using public key, but Gradle(Maven(Ant)) just prompts
+                        // for the password instead, so I have to keep a real password in my
+                        // ~/.gradle/settings.gradle.
+                        authentication(userName: hlsDeployUserName, password: hlsDeployPassword)
+                    }
                 }
             }
         }
