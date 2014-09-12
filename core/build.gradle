@@ -1,0 +1,11 @@
+description = "Services tier support for removing automatic transactions from Tapestry 5's Hibernate support"
+
+dependencies {
+    compile "org.apache.tapestry:tapestry-hibernate-core:${t5Version}"
+}
+
+jar {
+    manifest {
+        attributes 'Tapestry-Module-Classes': 'com.howardlewisship.notx.modules.NoTxCoreModule'
+    }
+}

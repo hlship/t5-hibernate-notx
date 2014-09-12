@@ -11,7 +11,7 @@ import org.hibernate.Transaction;
 
 /**
  * Shareable advice that can be used by {@link com.howardlewisship.notx.services.NoTxHibernateTransactionAdvisor}
- * and by {@link NoTxCommitAfterWorker}.
+ * and by  NoTxCommitAfterWorker (in the web project).
  */
 @Marker(NoTx.class)
 @ServiceId("NoTxMethodAdvice")

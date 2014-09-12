@@ -1,93 +1,86 @@
-description = "Remove automatic transactions from tapestry-hibernate"
+description "Remove automatic transactions from tapestry-hibernate"
 
-apply plugin: 'java'
-apply plugin: 'groovy'
-apply plugin: 'maven'
-apply plugin: "signing"
+ext.t5Version = "5.3.7"
 
-sourceCompatibility = '1.6'
-targetCompatibility = '1.6'
+subprojects {
 
-version = '0.0.1-SNAPSHOT'
+    apply plugin: 'java'
+    apply plugin: 'groovy'
+    apply plugin: 'maven'
+    apply plugin: "signing"
 
-group = 'com.howardlewisship'
+    sourceCompatibility = '1.6'
+    targetCompatibility = '1.6'
 
-repositories {
-    mavenCentral()
+    version = '0.0.1-SNAPSHOT'
 
-    // All things JBoss/Javassist/Hibernate
-    maven {
-        name "JBoss"
-        url "http://repository.jboss.org/nexus/content/groups/public/"
-    }
-}
+    group = 'com.howardlewisship.t5-hibernate-notx'
 
-configurations {
-
-    configurations.all {
-        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-    }
-
-    published.extendsFrom archives, signatures
-}
-
-signing {
-    sign configurations.archives
-}
-
-dependencies {
-    compile "org.apache.tapestry:tapestry-hibernate:5.3.7"
-
-    testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
-    testCompile 'com.h2database:h2:1.4.181'
-    testCompile 'org.apache.tapestry:tapestry-test:5.3.7'
-}
-
-jar {
-    manifest {
-        attributes 'Tapestry-Module-Classes': 'com.howardlewisship.notx.modules.NoTxModule'
-    }
-}
-
-configurations {
-    deployerJars
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    deployerJars "org.apache.maven.wagon:wagon-ssh:2.2"
-}
-
-project.ext.deployRepositoryRoot = "scp://ssh.phx.nearlyfreespeech.net/home/public/repository"
-
-uploadArchives {
     repositories {
+        mavenCentral()
 
-        project.ext.deployer = repositories.mavenDeployer {
+        // All things JBoss/Javassist/Hibernate
+        maven {
+            name "JBoss"
+            url "http://repository.jboss.org/nexus/content/groups/public/"
+        }
+    }
 
-            pom.project {
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        distribution 'repo'
+    configurations {
+
+        configurations.all {
+            resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+        }
+
+        published.extendsFrom archives, signatures
+    }
+
+    signing {
+        sign configurations.archives
+    }
+
+
+    configurations {
+        deployerJars
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        deployerJars "org.apache.maven.wagon:wagon-ssh:2.2"
+    }
+
+    project.ext.deployRepositoryRoot = "scp://ssh.phx.nearlyfreespeech.net/home/public/repository"
+
+    uploadArchives {
+        repositories {
+
+            project.ext.deployer = repositories.mavenDeployer {
+
+                pom.project {
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
                     }
                 }
-            }
 
-            configuration = configurations.deployerJars
+                configuration = configurations.deployerJars
 
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-            snapshotRepository(url: "$deployRepositoryRoot/snapshots") {
-                // I'd prefer to authenticate using public key, but Gradle(Maven(Ant)) just prompts
-                // for the password instead, so I have to keep a real password in my
-                // ~/.gradle/settings.gradle.
-                authentication(userName: hlsDeployUserName, password: hlsDeployPassword)
+                snapshotRepository(url: "$deployRepositoryRoot/snapshots") {
+                    // I'd prefer to authenticate using public key, but Gradle(Maven(Ant)) just prompts
+                    // for the password instead, so I have to keep a real password in my
+                    // ~/.gradle/settings.gradle.
+                    authentication(userName: hlsDeployUserName, password: hlsDeployPassword)
+                }
             }
         }
     }
+
 }

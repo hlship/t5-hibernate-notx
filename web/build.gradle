@@ -1,0 +1,16 @@
+description = "Web tier support for removing automatic transactions from Tapestry 5's Hibernate support"
+
+dependencies {
+    compile project(":core")
+    compile "org.apache.tapestry:tapestry-hibernate:${t5Version}"
+
+    testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+    testCompile 'com.h2database:h2:1.4.181'
+    testCompile 'org.apache.tapestry:tapestry-test:5.3.7'
+}
+
+jar {
+    manifest {
+        attributes 'Tapestry-Module-Classes': 'com.howardlewisship.notx.modules.NoTxWebModule'
+    }
+}
