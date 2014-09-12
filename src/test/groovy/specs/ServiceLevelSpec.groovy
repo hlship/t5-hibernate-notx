@@ -1,7 +1,6 @@
 package specs
 
 import app.services.TweetDAO
-import com.howardlewisship.notx.modules.NoTxModule
 import org.apache.tapestry5.hibernate.HibernateCoreModule
 import org.apache.tapestry5.hibernate.HibernateModule
 import org.apache.tapestry5.hibernate.HibernateSessionManager
@@ -25,7 +24,7 @@ class ServiceLevelSpec extends Specification {
         Logger logger = LoggerFactory.getLogger(ServiceLevelSpec)
         TapestryAppInitializer init = new TapestryAppInitializer(logger, "app", "app")
 
-        init.addModules(HibernateCoreModule, HibernateModule, NoTxModule)
+        init.addModules(HibernateCoreModule, HibernateModule)
 
         registry = init.createRegistry()
 
