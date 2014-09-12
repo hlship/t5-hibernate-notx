@@ -1,6 +1,5 @@
 # t5-hibernate-notx
 
-
 _notx = No Transaction_
 
 Changes how Tapestry's Hibernate transaction support works to only create transactions for @CommitAfter methods.
@@ -16,6 +15,11 @@ starts and commits the transaction.
 
 Note: A transaction commits even if a checked exception is thrown by the method.  A runtime exception will result
 in a rollback of the transaction.
+
+## Version
+
+This library was built specifically against Tapestry 5.3.7; however, the interfaces that are used are unchanged in
+Tapestry 5.4, so it should be a simple matter to use it with the latest versions of Tapestry.
 
 ## TODO
 
