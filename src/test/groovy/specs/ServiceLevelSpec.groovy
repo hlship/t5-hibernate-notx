@@ -2,21 +2,28 @@ package specs
 
 import com.howardlewisship.notx.modules.NoTxModule
 import org.apache.tapestry5.hibernate.HibernateCoreModule
+import org.apache.tapestry5.hibernate.HibernateModule
 import org.apache.tapestry5.hibernate.HibernateSessionManager
+import org.apache.tapestry5.internal.TapestryAppInitializer
 import org.apache.tapestry5.ioc.Registry
-import org.apache.tapestry5.ioc.RegistryBuilder
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
-
-class NoTxtHibernateSessionManagerSpec extends Specification {
+class ServiceLevelSpec extends Specification {
 
     @Shared
     Registry registry
 
     def setupSpec() {
-        registry = RegistryBuilder.buildAndStartupRegistry(HibernateCoreModule, NoTxModule)
+        Logger logger = LoggerFactory.getLogger(ServiceLevelSpec)
+        TapestryAppInitializer init = new TapestryAppInitializer(logger, "app", "app")
+
+        init.addModules(HibernateCoreModule, HibernateModule, NoTxModule)
+
+        registry = init.createRegistry()
     }
 
     def cleanupSpec() {
@@ -29,7 +36,7 @@ class NoTxtHibernateSessionManagerSpec extends Specification {
     }
 
     @Unroll
-    def "#methodNameStr will throw IllegalStateException"() {
+    def "HibernateSessionManager.#methodNameStr will throw IllegalStateException"() {
 
         when:
 
