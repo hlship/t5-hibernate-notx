@@ -55,7 +55,7 @@ It is possible that Tapestry 5.4 may soon add an option to duplicate this behavi
 Support for @CommitAfter on service methods, via decoration, has not been addressed and will likely cause failures
 if used.
 
-Although a simple application has been created to test the @CommitAfter annotation, the tests have not been automated.
+Testing is incomplete, especially for the web tier use of @CommitAfter (on component methods).
 
 ## License
 
