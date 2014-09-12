@@ -1,5 +1,6 @@
 package specs
 
+import app.services.TweetDAO
 import com.howardlewisship.notx.modules.NoTxModule
 import org.apache.tapestry5.hibernate.HibernateCoreModule
 import org.apache.tapestry5.hibernate.HibernateModule
@@ -17,6 +18,9 @@ class ServiceLevelSpec extends Specification {
     @Shared
     Registry registry
 
+    @Shared
+    TweetDAO dao
+
     def setupSpec() {
         Logger logger = LoggerFactory.getLogger(ServiceLevelSpec)
         TapestryAppInitializer init = new TapestryAppInitializer(logger, "app", "app")
@@ -24,11 +28,14 @@ class ServiceLevelSpec extends Specification {
         init.addModules(HibernateCoreModule, HibernateModule, NoTxModule)
 
         registry = init.createRegistry()
+
+        dao = registry.getService TweetDAO
     }
 
     def cleanupSpec() {
         registry.shutdown()
         registry = null
+        dao = null
     }
 
     def cleanup() {
@@ -53,5 +60,38 @@ class ServiceLevelSpec extends Specification {
 
         methodName << ["abort", "commit"]
         methodNameStr = "${methodName}()"
+    }
+
+    def "can perform non-transactional operations"() {
+
+        when:
+
+        def tweets = dao.all
+
+        then:
+
+        noExceptionThrown()
+
+        tweets != null
+    }
+
+    def "can perform transactional operations"() {
+
+        setup:
+
+        dao.deleteAll()
+
+        when:
+
+        dao.addNew "hlship", "This works fine!"
+
+        registry.cleanupThread()
+
+        def tweets = dao.all
+
+        then:
+
+        tweets.size() == 1
+        tweets[0].message == "This works fine!"
     }
 }
