@@ -34,11 +34,11 @@ Update your build to search to the repository; this is how you do it for Gradle:
 
 Add the correct dependency to your project:
 
-    compile "com.howardlewisship.t5-hibernate-notx:web:0.0.1-SNAPSHOT"
+    compile "com.howardlewisship:t5-hibernate-notx-web:0.0.1-SNAPSHOT"
 
     
-If you are building a standalone application, and not a Tapestry 5 application, you can use the `core` (not `web`)
-module.
+If you are building a standalone application, and not a Tapestry 5 application, you can use the `t5-hibernate-notx-core` 
+(instead of `t5-hibernate-notx-web`) module.
 
 Just having the module on the classpath will let it initialize and override select parts of Tapestry's default 
 Hibernate support.
@@ -53,9 +53,10 @@ It is possible that Tapestry 5.4 may soon add an option to duplicate this behavi
 ## TODO
 
 Support for @CommitAfter on service methods, via decoration, has not been addressed and will likely cause failures
-if used.
+if used.  @CommitAfter is supported using advice, and on component class methods.
 
-Testing is incomplete, especially for the web tier use of @CommitAfter (on component methods).
+Testing is incomplete, especially for the web tier use of @CommitAfter (on component methods). By incomplete,
+we mean tested manually, not automated.
 
 ## License
 

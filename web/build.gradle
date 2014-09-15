@@ -1,5 +1,7 @@
 description = "Web tier support for removing automatic transactions from Tapestry 5's Hibernate support"
 
+archivesBaseName = "t5-hibernate-notx-web"
+
 dependencies {
     compile project(":core")
     compile "org.apache.tapestry:tapestry-hibernate:${t5Version}"

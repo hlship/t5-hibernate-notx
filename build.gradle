@@ -21,7 +21,7 @@ subprojects {
 
     version = '0.0.1-SNAPSHOT'
 
-    group = 'com.howardlewisship.t5-hibernate-notx'
+    group = 'com.howardlewisship'
 
     repositories {
         mavenCentral()
@@ -56,8 +56,6 @@ subprojects {
         dependencies {
             deployerJars "org.apache.maven.wagon:wagon-ssh:2.2"
         }
-
-        project.ext.
 
         uploadArchives {
             repositories {

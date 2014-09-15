@@ -1,5 +1,7 @@
 description = "Services tier support for removing automatic transactions from Tapestry 5's Hibernate support"
 
+archivesBaseName = "t5-hibernate-notx-core"
+
 dependencies {
     compile "org.apache.tapestry:tapestry-hibernate-core:${t5Version}"
 }
